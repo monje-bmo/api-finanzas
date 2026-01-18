@@ -19,5 +19,6 @@ namespace api.Models
         public DateTime Update_at { get; set; } = DateTime.UtcNow;
 
         public List<JournalLine> JournalLines { get; set; } = new List<JournalLine>();
+        public List<DebtMovement> DebtMovements { get; set; } = new List<DebtMovement>();
     }
 }

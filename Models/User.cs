@@ -19,6 +19,6 @@ namespace api.Models
         public List<Account> Accounts { get; set; } = new List<Account>();
         public List<JournalHeader> JournalHeaders { get; set; } = new List<JournalHeader>();
 
-        // public List<Debts> Debts {get;set;} = new List<Debts>();
+        public List<Debt> Debts { get; set; } = new List<Debt>();
     }
 }
