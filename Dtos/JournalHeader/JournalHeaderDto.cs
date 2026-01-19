@@ -19,8 +19,6 @@ namespace api.Dtos.JournalHeader
         public DateTime Created_at { get; set; }
         public DateTime Update_at { get; set; }
 
-        public List<JournalLineDto> JournalLines { get; set; }
-        public List<DebtMovementDto> DebtMovements { get; set; }
 
     }
 }
