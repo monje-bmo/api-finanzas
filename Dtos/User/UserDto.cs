@@ -14,16 +14,8 @@ namespace api.Dtos.User
     {
         public int Id { get; set; }
         public string Username { get; set; } = string.Empty;
-        public string Password_hash { get; set; } = string.Empty;
         public bool State { get; set; } = true;
         public DateTime Created_at { get; set; } = DateTime.Now;
 
-        public List<BusinessDto> Businesses { get; set; }
-        public List<CategoryDto> Categories { get; set; }
-        public List<AccountDto> Accounts { get; set; }
-        public List<JournalHeaderDto> JournalHeaders { get; set; }
-
-        public List<DebtDto> Debts { get; set; }
- 
     }
 }
