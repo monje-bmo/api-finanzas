@@ -7,6 +7,12 @@ namespace api.Dtos.JournalLine
 {
     public class JournalLineDto
     {
-        
+        public int Id { get; set; }
+        public int JournalHeaderId { get; set; }
+        public int AccountId { get; set; }
+        public decimal Amount { get; set; }
+        public int? CategoryId { get; set; }
+        public int? BusinessId { get; set; }
+        public string? Note { get; set; }
     }
 }

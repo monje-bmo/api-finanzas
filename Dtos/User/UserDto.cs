@@ -2,6 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using api.Dtos.Account;
+using api.Dtos.Business;
+using api.Dtos.Category;
+using api.Dtos.Debt;
+using api.Dtos.JournalHeader;
 
 namespace api.Dtos.User
 {
@@ -13,13 +18,12 @@ namespace api.Dtos.User
         public bool State { get; set; } = true;
         public DateTime Created_at { get; set; } = DateTime.Now;
 
-        // agregarlo cuando ya tenga los dtos de estas clases 
-        // public List<Business> Businesses { get; set; } = new List<Business>();
-        // public List<Category> Categories { get; set; } = new List<Category>();
-        // public List<Account> Accounts { get; set; } = new List<Account>();
-        // public List<JournalHeader> JournalHeaders { get; set; } = new List<JournalHeader>();
+        public List<BusinessDto> Businesses { get; set; }
+        public List<CategoryDto> Categories { get; set; }
+        public List<AccountDto> Accounts { get; set; }
+        public List<JournalHeaderDto> JournalHeaders { get; set; }
 
-        // public List<Debt> Debts { get; set; } = new List<Debt>();
+        public List<DebtDto> Debts { get; set; }
  
     }
 }
