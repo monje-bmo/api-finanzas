@@ -34,10 +34,24 @@ namespace api.Controllers
             
             return Ok(category.ToCategoryDTO());
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            if(!ModelState.IsValid)
+                return BadRequest();
+
+            var c = await _repo.GetAllCategoryAsync();
+
+            return Ok(c.Select(f => f.ToCategoryDTO()));
+        }
         
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateCategoryDto createCategoryDto)
         {
+            if(!ModelState.IsValid)
+                return BadRequest();    
+
             var userId = User.GetUserId();
             if (string.IsNullOrEmpty(userId))
                 return Unauthorized("No se encontró el UserId en el token.");
@@ -58,6 +72,37 @@ namespace api.Controllers
             );
 
         }
+
+        [HttpPut]
+        [Route("{id:int}")]
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateCategoryDto updateCategoryDto)
+        {
+            if(!ModelState.IsValid)
+                return BadRequest();
+
+            var category = await _repo.UpdateCategoryAsync(id, updateCategoryDto);
+
+            if (category == null)
+                return NotFound("No se encontro la categoria.");
+
+            return Ok(category.ToCategoryDTO());
+
+        }
+
+        [HttpDelete]
+        [Route("id:int")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+            
+            var category = await _repo.DeleteCategoryAsync(id);
+            if (category == null)
+                return NotFound("No se encontro la categoria.");
+                
+            return NoContent();
+        }
+
 
     }
 }
