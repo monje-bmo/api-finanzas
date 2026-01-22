@@ -23,8 +23,23 @@ namespace api.Data
         {
             base.OnModelCreating(builder);
 
+            List<IdentityRole> roles = new List<IdentityRole>
+            {
+                new IdentityRole
+                {
+                    Name = "Admin",
+                    NormalizedName = "ADMIN"
+                },
+                new IdentityRole
+                {
+                    Name = "User",
+                    NormalizedName = "USER"
+                }
+            };
             builder.Entity<User>().ToTable("User");
+            builder.Entity<IdentityRole>().HasData(roles);
         }
+
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Business> Businesses { get; set; }
         public DbSet<Category> Categories { get; set; }
