@@ -1,5 +1,7 @@
 using api.Data;
+using api.Interfaces;
 using api.Models;
+using api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -15,11 +17,11 @@ builder.Services.AddSwaggerGen();
 
 
 
-builder.Services.AddDbContext<ApplicationDBContext>(options => 
+builder.Services.AddDbContext<ApplicationDBContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 
-builder.Services.AddIdentity<User, IdentityRole<int>>(options =>
+builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
@@ -52,6 +54,9 @@ builder.Services.AddAuthentication(options =>
 });
 
 
+// uso de Interfacesgmil
+builder.Services.AddScoped<ITokenService, TokenService>();
+
 
 var app = builder.Build();
 
@@ -67,6 +72,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
+app.MapControllers();
 
 
 

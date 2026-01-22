@@ -11,7 +11,8 @@ namespace api.Models
         public int Id { get; set; }
 
         //fk user
-        public int UserId { get; set; }
+        public string UserId { get; set; } = string.Empty;
+
         public User User { get; set; } = null!;
 
         // fk business

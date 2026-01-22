@@ -9,7 +9,8 @@ namespace api.Models
     public class JournalHeader
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; } = string.Empty;
+
         public User User { get; set; } = null!;
         public DateTime DateMove { get; set; } = DateTime.UtcNow;
         public TypeMove TypeMoves { get; set; }

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace api.Models
 {
-    public class User : IdentityUser<int>
+    public class User : IdentityUser
     {
      
         // // Relaciones con las tablas

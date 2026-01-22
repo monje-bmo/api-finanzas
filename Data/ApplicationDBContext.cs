@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Identity;
 namespace api.Data
 {
     public class ApplicationDBContext
-        : IdentityDbContext<User, IdentityRole<int>, int>
+        : IdentityDbContext<User>
     {
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options)
         : base(options)
