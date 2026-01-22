@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
+using api.Dtos.CoinType;
 using api.Interfaces;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -47,13 +48,14 @@ namespace api.Repository
             return await _context.CoinTypes.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<CoinType?> UpdateAsync(int id, CoinType coinType)
+        public async Task<CoinType?> UpdateAsync(int id, UpdateCoinTypeDto coinType)
         {
             var coinModel = await _context.CoinTypes.FirstOrDefaultAsync(x => x.Id == id);
             if (coinModel == null)
                 return null;
 
             coinModel.Description = coinType.Description;
+            coinModel.State = coinType.State;
 
             return coinModel;
 

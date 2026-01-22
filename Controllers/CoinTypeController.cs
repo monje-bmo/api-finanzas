@@ -29,7 +29,7 @@ namespace api.Controllers
                 return BadRequest();
 
             var cointype = await _repo.GetAllAsync();
-            
+
             return Ok(
                 cointype.Select(c => c.ToCoinTypeDto())
             );
@@ -66,5 +66,34 @@ namespace api.Controllers
             );
         }
 
+        [HttpPut]
+        [Route("{id:int}")]
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateCoinTypeDto coinTypeDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var coinType = await _repo.UpdateAsync(id, coinTypeDto);
+
+            if (coinType == null)
+                return NotFound("Tipo de moneda no encontrado.");
+
+            return Ok(coinType.ToCoinTypeDto());
+        }
+
+        [HttpDelete]
+        [Route("{id:int}")]
+
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+            
+            var coin = await _repo.DeleteAsync(id);
+            if (coin == null)
+                return NotFound("Tipo de moneda no encontrado.");
+
+            return NoContent();    
+        }
     }
 }
