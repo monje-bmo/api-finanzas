@@ -1,6 +1,8 @@
+using api.Controllers;
 using api.Data;
 using api.Interfaces;
 using api.Models;
+using api.Repository;
 using api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -56,6 +58,7 @@ builder.Services.AddAuthentication(options =>
 
 // uso de Interfacesgmil
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<ICoinTypeRepository, CoinTypeRepository>();
 
 
 var app = builder.Build();
