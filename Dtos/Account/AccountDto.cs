@@ -16,11 +16,6 @@ namespace api.Dtos.Account
         public int CoinTypeId { get; set; }
         public decimal OpeningBalance { get; set; }
         public DateOnly DateOpeningBalance { get; set; }
-        public bool State { get; set; } = true;
-        public DateTime Created_at { get; set; } = DateTime.UtcNow;
-        public DateTime Update_at { get; set; } = DateTime.UtcNow;
 
-        public List<JournalLineDto> JournalLines { get; set; }
-        
     }
 }
