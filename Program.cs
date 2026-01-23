@@ -1,5 +1,6 @@
 using api.Controllers;
 using api.Data;
+using api.Helpers;
 using api.Interfaces;
 using api.Models;
 using api.Repository;
@@ -59,6 +60,9 @@ builder.Services.AddAuthentication(options =>
 // uso de Interfacesgmil
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<ICoinTypeRepository, CoinTypeRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IBusinessRepository, BusinessRepository>();
+builder.Services.AddScoped<ITypeBusinessRepo, TypeBusinessRepo>();
 
 
 var app = builder.Build();
