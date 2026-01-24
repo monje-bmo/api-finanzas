@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Dtos.Business;
 using api.Helpers;
+using api.Interfaces;
 using api.Mappers;
 using api.Models;
 using api.Repository;
@@ -18,9 +19,9 @@ namespace api.Controllers
     public class BusinessController : ControllerBase
     {
 
-        private readonly BusinessRepository repo;
+        private readonly IBusinessRepository repo;
 
-        public BusinessController(BusinessRepository r)
+        public BusinessController(IBusinessRepository r)
         {
             repo = r;
         }

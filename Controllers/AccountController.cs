@@ -20,8 +20,8 @@ namespace api.Controllers
     [Authorize]
     public class AccountController : ControllerBase
     {
-        private readonly AccountRepo repo;
-        public AccountController(AccountRepo r)
+        private readonly IAccountRepository repo;
+        public AccountController(IAccountRepository r)
         {
             repo = r;
         }

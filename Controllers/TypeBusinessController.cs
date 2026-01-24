@@ -6,6 +6,7 @@ using api.Repository;
 using api.Dtos.TypeBusiness;
 using Microsoft.AspNetCore.Mvc;
 using api.Mappers;
+using api.Helpers;
 
 namespace api.Controllers
 {
@@ -13,8 +14,8 @@ namespace api.Controllers
     [Route("api/typeBusiness")]
     public class TypeBusinessController : ControllerBase
     {
-        private readonly TypeBusinessRepo repo;
-        public TypeBusinessController(TypeBusinessRepo repoTB)
+        private readonly ITypeBusinessRepo repo;
+        public TypeBusinessController(ITypeBusinessRepo repoTB)
         {
             repo = repoTB;
         }

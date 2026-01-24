@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using api.Dtos.Category;
 using api.Helpers;
+using api.Interfaces;
 using api.Mappers;
 using api.Models;
 using api.Repository;
@@ -18,10 +19,10 @@ namespace api.Controllers
     [Authorize]
     public class CategoryController : ControllerBase
     {
-        private readonly CategoryRepository _repo;
-        public CategoryController(CategoryRepository categoryRepository)
+        private readonly ICategoryRepository _repo;
+        public CategoryController(ICategoryRepository repo)
         {
-            _repo = categoryRepository;
+            _repo = repo;
         }
 
         [HttpGet]

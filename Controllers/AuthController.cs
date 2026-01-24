@@ -7,6 +7,7 @@ using api.Interfaces;
 using api.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Controllers
 {
@@ -17,12 +18,36 @@ namespace api.Controllers
         private readonly UserManager<User> _userManager;
         private readonly ITokenService _token;
 
-        public AuthController(UserManager<User> user, ITokenService token)
+        private readonly SignInManager<User> signInManager;
+
+        public AuthController(UserManager<User> user, ITokenService token, SignInManager<User> signIn)
         {
             _userManager = user;
             _token = token;
+            signInManager = signIn;
         }
 
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
+        {
+            if (!ModelState.IsValid) return BadRequest();
+
+            var usr = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == loginDto.UserName);
+            if (usr == null) return NotFound("No se encontro al usuario.");
+
+            var result = await signInManager.CheckPasswordSignInAsync(usr, loginDto.Password, false);
+            if(!result.Succeeded) return Unauthorized("el username o password, son incorrectos.");
+
+            return Ok(
+                new NewUserDTO
+                {
+                    Email = usr.Email,
+                    UserName = usr.UserName,
+                    Token = _token.CreateToken(usr)
+                }
+            );
+
+        }
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDTO registerDTO)
         {
