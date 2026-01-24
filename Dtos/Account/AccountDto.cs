@@ -10,7 +10,6 @@ namespace api.Dtos.Account
     public class AccountDto
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
         public string Name { get; set; } = string.Empty;
         public TypeAccountEnum TypeAccount { get; set; }
         public int CoinTypeId { get; set; }
