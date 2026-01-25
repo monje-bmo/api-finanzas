@@ -69,7 +69,7 @@ namespace api.Controllers
             return CreatedAtAction(
                 nameof(GetById),
                 new{id = category.Id},
-                category
+                category.ToCategoryDTO()
             );
 
         }
