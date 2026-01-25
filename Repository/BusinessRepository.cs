@@ -27,34 +27,34 @@ namespace api.Repository
             return business;
         }
 
-        public async Task<Business?> DeleteBussinesAsync(int id)
+        public async Task<Business?> DeleteBussinesAsync(string userId, int id)
         {
-            var b = await _ctx.Businesses.FirstOrDefaultAsync(x => x.Id == id);
+            var b = await _ctx.Businesses.FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId);
             if (b == null)
                 return null;
             _ctx.Businesses.Remove(b);
             await _ctx.SaveChangesAsync();
-            return b; 
+            return b;
         }
 
-        public async Task<List<Business>> GetAllBussinesAsync()
+        public async Task<List<Business>> GetAllBussinesAsync(string userId)
         {
-            return await _ctx.Businesses.ToListAsync();
+            return await _ctx.Businesses.Where(x => x.UserId == userId).ToListAsync();
         }
 
-        public async Task<Business?> GetById(int id)
+        public async Task<Business?> GetById(string userId, int id)
         {
-            
-            return await _ctx.Businesses.FirstOrDefaultAsync(x => x.Id == id);
+
+            return await _ctx.Businesses.FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId);
         }
 
-        public async Task<Business?> UpdateBussinesAsync(int id, UpdateBusinessDto dto)
+        public async Task<Business?> UpdateBussinesAsync(string userId, int id, UpdateBusinessDto dto)
         {
-            var b = await _ctx.Businesses.FirstOrDefaultAsync(x => x.Id == id);
+            var b = await _ctx.Businesses.FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId);
 
-            if (b == null)  
+            if (b == null)
                 return null;
-            
+
             b.TypeBusinessId = dto.TypeBusinessId;
             b.Description = dto.Description;
             b.State = dto.State;

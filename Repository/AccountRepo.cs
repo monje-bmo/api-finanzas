@@ -27,9 +27,9 @@ namespace api.Repository
         }
 
 
-        public async Task<Account?> DeleteAsync(int id)
+        public async Task<Account?> DeleteAsync(string userId, int id)
         {
-            var account = await ctx.Accounts.FirstOrDefaultAsync(x => x.Id == id);
+            var account = await ctx.Accounts.FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId);
             if (account == null) return null;
 
             ctx.Accounts.Remove(account);
@@ -37,19 +37,19 @@ namespace api.Repository
             return account;
         }
 
-        public async Task<List<Account>> GetAllAsync()
+        public async Task<List<Account>> GetAllAsync(string userId)
         {
-            return await ctx.Accounts.ToListAsync();
+            return await ctx.Accounts.Where(x => x.UserId == userId).ToListAsync();
         }
 
-        public async Task<Account?> GetByIdAsync(int id)
+        public async Task<Account?> GetByIdAsync(string userId, int id)
         {
-            return await ctx.Accounts.FirstOrDefaultAsync(x => x.Id == id);
+            return await ctx.Accounts.FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId);
         }
 
-        public async Task<Account?> UpdateAsync(int id, UpdateAccountDto dto)
+        public async Task<Account?> UpdateAsync(string userId, int id, UpdateAccountDto dto)
         {
-            var account = await ctx.Accounts.FirstOrDefaultAsync(x => x.Id == id);
+            var account = await ctx.Accounts.FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId);
             if (account == null) return null;
 
             account.Name = dto.Name;

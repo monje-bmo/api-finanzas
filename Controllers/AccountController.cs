@@ -32,7 +32,10 @@ namespace api.Controllers
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            var ac = await repo.GetByIdAsync(id);
+            var usrId = User.GetUserId();
+            if (string.IsNullOrEmpty(usrId)) return NotFound("No se encontro el usuario.");
+
+            var ac = await repo.GetByIdAsync(usrId, id);
             if (ac == null) return NotFound("Cuenta no encontrada.");
 
             return Ok(ac.ToAccountDto());
@@ -42,8 +45,10 @@ namespace api.Controllers
         public async Task<IActionResult> GetAll()
         {
             if (!ModelState.IsValid) return BadRequest();
+            var usrId = User.GetUserId();
+            if (string.IsNullOrEmpty(usrId)) return NotFound("No se encontro el usuario.");
 
-            var accounts = await repo.GetAllAsync();
+            var accounts = await repo.GetAllAsync(usrId);
 
             return Ok(accounts.Select(a => a.ToAccountDto()));
         }
@@ -81,7 +86,10 @@ namespace api.Controllers
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            var account = await repo.UpdateAsync(id, dto);
+            var usrId = User.GetUserId();
+            if (string.IsNullOrEmpty(usrId)) return NotFound("No se encontro el usuario.");
+
+            var account = await repo.UpdateAsync(usrId, id, dto);
             if (account == null) return NotFound("No se encontro la cuenta a editar.");
 
             return Ok(account.ToAccountDto());
@@ -92,8 +100,10 @@ namespace api.Controllers
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             if (!ModelState.IsValid) return BadRequest();
+            var usrId = User.GetUserId();
+            if (string.IsNullOrEmpty(usrId)) return NotFound("No se encontro el usuario.");
 
-            var a = await repo.DeleteAsync(id);
+            var a = await repo.DeleteAsync(usrId, id);
             if (a == null) return NotFound("Cuenta no encontrada.");
 
             return NoContent();

@@ -32,7 +32,10 @@ namespace api.Controllers
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            var business = await repo.GetById(id);
+            var usrId = User.GetUserId();
+            if (string.IsNullOrEmpty(usrId)) return NotFound("No se encontro el usuario.");
+
+            var business = await repo.GetById(usrId, id);
             if (business == null) return NotFound("Negocio no encontrado.");
 
             return Ok(business.ToBusinessDto());
@@ -43,7 +46,10 @@ namespace api.Controllers
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            var business = await repo.GetAllBussinesAsync();
+            var usrId = User.GetUserId();
+            if (string.IsNullOrEmpty(usrId)) return NotFound("No se encontro el usuario.");
+
+            var business = await repo.GetAllBussinesAsync(usrId);
 
             return Ok(business.Select(b => b.ToBusinessAllDto()));
         }
@@ -78,7 +84,10 @@ namespace api.Controllers
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            var business = await repo.UpdateBussinesAsync(id, dto);
+            var usrId = User.GetUserId();
+            if (string.IsNullOrEmpty(usrId)) return NotFound("No se encontro el usuario.");
+
+            var business = await repo.UpdateBussinesAsync(usrId, id, dto);
             if (business == null) return NotFound("Negocio no encontrado.");
 
             return Ok(business.ToBusinessDto());
@@ -91,7 +100,10 @@ namespace api.Controllers
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            var business = await repo.DeleteBussinesAsync(id);
+            var usrId = User.GetUserId();
+            if (string.IsNullOrEmpty(usrId)) return NotFound("No se encontro el usuario.");
+
+            var business = await repo.DeleteBussinesAsync(usrId, id);
             if (business == null) return NotFound("Negocio no encontrado.");
 
             return NoContent();

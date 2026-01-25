@@ -29,29 +29,37 @@ namespace api.Controllers
         [Route("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
-            var category = await _repo.GetCategoryByIdAsync(id);
-            if (category == null) 
+            if (!ModelState.IsValid) return BadRequest();
+
+            var usrId = User.GetUserId();
+            if (string.IsNullOrEmpty(usrId)) return NotFound("No se encontro el usuario.");
+
+            var category = await _repo.GetCategoryByIdAsync(usrId, id);
+            if (category == null)
                 return NotFound("Categoria no encontrada");
-            
+
             return Ok(category.ToCategoryDTO());
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest();
 
-            var c = await _repo.GetAllCategoryAsync();
+            var usrId = User.GetUserId();
+            if (string.IsNullOrEmpty(usrId)) return NotFound("No se encontro el usuario.");
+
+            var c = await _repo.GetAllCategoryAsync(usrId);
 
             return Ok(c.Select(f => f.ToCategoryDTO()));
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateCategoryDto createCategoryDto)
         {
-            if(!ModelState.IsValid)
-                return BadRequest();    
+            if (!ModelState.IsValid)
+                return BadRequest();
 
             var userId = User.GetUserId();
             if (string.IsNullOrEmpty(userId))
@@ -68,7 +76,7 @@ namespace api.Controllers
 
             return CreatedAtAction(
                 nameof(GetById),
-                new{id = category.Id},
+                new { id = category.Id },
                 category.ToCategoryDTO()
             );
 
@@ -78,10 +86,13 @@ namespace api.Controllers
         [Route("{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateCategoryDto updateCategoryDto)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest();
 
-            var category = await _repo.UpdateCategoryAsync(id, updateCategoryDto);
+            var usrId = User.GetUserId();
+            if (string.IsNullOrEmpty(usrId)) return NotFound("No se encontro el usuario.");
+
+            var category = await _repo.UpdateCategoryAsync(usrId, id, updateCategoryDto);
 
             if (category == null)
                 return NotFound("No se encontro la categoria.");
@@ -96,11 +107,14 @@ namespace api.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest();
-            
-            var category = await _repo.DeleteCategoryAsync(id);
+
+            var usrId = User.GetUserId();
+            if (string.IsNullOrEmpty(usrId)) return NotFound("No se encontro el usuario.");
+
+            var category = await _repo.DeleteCategoryAsync(usrId, id);
             if (category == null)
                 return NotFound("No se encontro la categoria.");
-                
+
             return NoContent();
         }
 

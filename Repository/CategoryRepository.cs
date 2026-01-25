@@ -25,9 +25,9 @@ namespace api.Repository
             return category;
         }
 
-        public async Task<Category?> DeleteCategoryAsync(int id)
+        public async Task<Category?> DeleteCategoryAsync(string userId, int id)
         {
-            var cateory = await _ctx.Categories.FirstOrDefaultAsync(x => x.Id == id);
+            var cateory = await _ctx.Categories.FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId);
             if(cateory == null)
                 return null;
             _ctx.Categories.Remove(cateory);
@@ -35,19 +35,19 @@ namespace api.Repository
             return cateory;
         }
 
-        public async Task<List<Category>> GetAllCategoryAsync()
+        public async Task<List<Category>> GetAllCategoryAsync(string userId)
         {
-            return await _ctx.Categories.ToListAsync();
+            return await _ctx.Categories.Where(x => x.UserId == userId).ToListAsync();
         }
 
-        public async Task<Category?> GetCategoryByIdAsync(int id)
+        public async Task<Category?> GetCategoryByIdAsync(string userId, int id)
         {
-            return await _ctx.Categories.FirstOrDefaultAsync(x => x.Id == id);
+            return await _ctx.Categories.FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId);
         }
 
-        public async Task<Category?> UpdateCategoryAsync(int id, UpdateCategoryDto updateCategoryDto)
+        public async Task<Category?> UpdateCategoryAsync(string userId, int id, UpdateCategoryDto updateCategoryDto)
         {
-            var category = await _ctx.Categories.FirstOrDefaultAsync(x => x.Id == id);
+            var category = await _ctx.Categories.FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId);
             if(category == null)
                 return category;
             

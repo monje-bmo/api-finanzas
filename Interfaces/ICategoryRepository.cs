@@ -11,9 +11,9 @@ namespace api.Interfaces
     {
         
         public Task<Category> CreateCategoryAsync(Category category);
-        public Task<List<Category>> GetAllCategoryAsync(); 
-        public Task<Category?> GetCategoryByIdAsync(int id);
-        public Task<Category?> UpdateCategoryAsync(int id, UpdateCategoryDto updateCategoryDto);
-        public Task<Category?> DeleteCategoryAsync(int id);
+        public Task<List<Category>> GetAllCategoryAsync(string userId); 
+        public Task<Category?> GetCategoryByIdAsync(string userId, int id);
+        public Task<Category?> UpdateCategoryAsync(string userId, int id, UpdateCategoryDto updateCategoryDto);
+        public Task<Category?> DeleteCategoryAsync(string userId, int id);
     }
 }
