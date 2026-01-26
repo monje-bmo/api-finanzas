@@ -9,6 +9,7 @@ using api.Mappers;
 using api.Models;
 using api.Repository;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -20,10 +21,12 @@ namespace api.Controllers
     {
 
         private readonly IBusinessRepository repo;
+        private readonly UserManager<User> userManager;
 
-        public BusinessController(IBusinessRepository r)
+        public BusinessController(IBusinessRepository r, UserManager<User> user)
         {
             repo = r;
+            userManager = user;
         }
 
         [HttpGet]
@@ -32,10 +35,14 @@ namespace api.Controllers
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            var usrId = User.GetUserId();
-            if (string.IsNullOrEmpty(usrId)) return NotFound("No se encontro el usuario.");
+            var email = User.GetUserEmail();
+            if(string.IsNullOrEmpty(email)) return Unauthorized("Inicie sesion de nuevo.");
 
-            var business = await repo.GetById(usrId, id);
+            var user = await userManager.FindByEmailAsync(email);
+
+            if (user == null) return NotFound("No se encontro el usuario.");
+
+            var business = await repo.GetById(user.Id, id);
             if (business == null) return NotFound("Negocio no encontrado.");
 
             return Ok(business.ToBusinessDto());
@@ -46,10 +53,14 @@ namespace api.Controllers
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            var usrId = User.GetUserId();
-            if (string.IsNullOrEmpty(usrId)) return NotFound("No se encontro el usuario.");
+            var email = User.GetUserEmail();
+            if(string.IsNullOrEmpty(email)) return Unauthorized("Inicie sesion de nuevo.");
 
-            var business = await repo.GetAllBussinesAsync(usrId);
+            var user = await userManager.FindByEmailAsync(email);
+
+            if (user == null) return NotFound("No se encontro el usuario.");
+
+            var business = await repo.GetAllBussinesAsync(user.Id);
 
             return Ok(business.Select(b => b.ToBusinessAllDto()));
         }
@@ -59,12 +70,16 @@ namespace api.Controllers
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            var userId = User.GetUserId();
-            if (string.IsNullOrEmpty(userId)) return Unauthorized("no se encontro al usuario.");
+            var email = User.GetUserEmail();
+            if(string.IsNullOrEmpty(email)) return Unauthorized("Inicie sesion de nuevo.");
+
+            var user = await userManager.FindByEmailAsync(email);
+
+            if (user == null) return NotFound("No se encontro el usuario.");
 
             var business = new Business
             {
-                UserId = userId,
+                UserId = user.Id,
                 Description = dto.Description,
                 TypeBusinessId = dto.TypeBusinessId
             };
@@ -84,10 +99,14 @@ namespace api.Controllers
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            var usrId = User.GetUserId();
-            if (string.IsNullOrEmpty(usrId)) return NotFound("No se encontro el usuario.");
+            var email = User.GetUserEmail();
+            if(string.IsNullOrEmpty(email)) return Unauthorized("Inicie sesion de nuevo.");
 
-            var business = await repo.UpdateBussinesAsync(usrId, id, dto);
+            var user = await userManager.FindByEmailAsync(email);
+
+            if (user == null) return NotFound("No se encontro el usuario.");
+
+            var business = await repo.UpdateBussinesAsync(user.Id, id, dto);
             if (business == null) return NotFound("Negocio no encontrado.");
 
             return Ok(business.ToBusinessDto());
@@ -100,10 +119,14 @@ namespace api.Controllers
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            var usrId = User.GetUserId();
-            if (string.IsNullOrEmpty(usrId)) return NotFound("No se encontro el usuario.");
+            var email = User.GetUserEmail();
+            if(string.IsNullOrEmpty(email)) return Unauthorized("Inicie sesion de nuevo.");
 
-            var business = await repo.DeleteBussinesAsync(usrId, id);
+            var user = await userManager.FindByEmailAsync(email);
+
+            if (user == null) return NotFound("No se encontro el usuario.");
+
+            var business = await repo.DeleteBussinesAsync(user.Id, id);
             if (business == null) return NotFound("Negocio no encontrado.");
 
             return NoContent();

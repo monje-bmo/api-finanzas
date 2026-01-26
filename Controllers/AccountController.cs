@@ -21,9 +21,11 @@ namespace api.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IAccountRepository repo;
-        public AccountController(IAccountRepository r)
+        private readonly UserManager<User> userManager;
+        public AccountController(IAccountRepository r, UserManager<User> user)
         {
             repo = r;
+            userManager = user;
         }
 
         [HttpGet]
@@ -32,10 +34,14 @@ namespace api.Controllers
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            var usrId = User.GetUserId();
-            if (string.IsNullOrEmpty(usrId)) return NotFound("No se encontro el usuario.");
+            var email = User.GetUserEmail();
+            if(string.IsNullOrEmpty(email)) return Unauthorized("Inicie sesion de nuevo.");
 
-            var ac = await repo.GetByIdAsync(usrId, id);
+            var user = await userManager.FindByEmailAsync(email);
+
+            if (user == null) return NotFound("No se encontro el usuario.");
+
+            var ac = await repo.GetByIdAsync(user.Id, id);
             if (ac == null) return NotFound("Cuenta no encontrada.");
 
             return Ok(ac.ToAccountDto());
@@ -45,10 +51,13 @@ namespace api.Controllers
         public async Task<IActionResult> GetAll()
         {
             if (!ModelState.IsValid) return BadRequest();
-            var usrId = User.GetUserId();
-            if (string.IsNullOrEmpty(usrId)) return NotFound("No se encontro el usuario.");
+            var email = User.GetUserEmail();
+            if(string.IsNullOrEmpty(email)) return Unauthorized("Inicie sesion de nuevo.");
 
-            var accounts = await repo.GetAllAsync(usrId);
+            var user = await userManager.FindByEmailAsync(email);
+
+            if (user == null) return NotFound("No se encontro el usuario.");
+            var accounts = await repo.GetAllAsync(user.Id);
 
             return Ok(accounts.Select(a => a.ToAccountDto()));
         }
@@ -58,12 +67,16 @@ namespace api.Controllers
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            var user_id = User.GetUserId();
-            if (string.IsNullOrEmpty(user_id)) return Unauthorized("No se encontro el id del usuario.");
+            var email = User.GetUserEmail();
+            if(string.IsNullOrEmpty(email)) return Unauthorized("Inicie sesion de nuevo.");
+
+            var user = await userManager.FindByEmailAsync(email);
+
+            if (user == null) return NotFound("No se encontro el usuario.");
 
             var account = new Account
             {
-                UserId = user_id,
+                UserId = user.Id,
                 Name = dto.Name,
                 TypeAccount = dto.TypeAccount,
                 CoinTypeId = dto.CoinTypeId,
@@ -86,10 +99,14 @@ namespace api.Controllers
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            var usrId = User.GetUserId();
-            if (string.IsNullOrEmpty(usrId)) return NotFound("No se encontro el usuario.");
+            var email = User.GetUserEmail();
+            if(string.IsNullOrEmpty(email)) return Unauthorized("Inicie sesion de nuevo.");
 
-            var account = await repo.UpdateAsync(usrId, id, dto);
+            var user = await userManager.FindByEmailAsync(email);
+
+            if (user == null) return NotFound("No se encontro el usuario.");
+
+            var account = await repo.UpdateAsync(user.Id, id, dto);
             if (account == null) return NotFound("No se encontro la cuenta a editar.");
 
             return Ok(account.ToAccountDto());
@@ -100,10 +117,14 @@ namespace api.Controllers
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             if (!ModelState.IsValid) return BadRequest();
-            var usrId = User.GetUserId();
-            if (string.IsNullOrEmpty(usrId)) return NotFound("No se encontro el usuario.");
+            var email = User.GetUserEmail();
+            if(string.IsNullOrEmpty(email)) return Unauthorized("Inicie sesion de nuevo.");
 
-            var a = await repo.DeleteAsync(usrId, id);
+            var user = await userManager.FindByEmailAsync(email);
+
+            if (user == null) return NotFound("No se encontro el usuario.");
+
+            var a = await repo.DeleteAsync(user.Id, id);
             if (a == null) return NotFound("Cuenta no encontrada.");
 
             return NoContent();
