@@ -91,6 +91,7 @@ builder.Services.AddScoped<ICoinTypeRepository, CoinTypeRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IBusinessRepository, BusinessRepository>();
 builder.Services.AddScoped<ITypeBusinessRepo, TypeBusinessRepo>();
+builder.Services.AddScoped<IDailyMovement, DailyMovementRepo>();
 
 
 var app = builder.Build();

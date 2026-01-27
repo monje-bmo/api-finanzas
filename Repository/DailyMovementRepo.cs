@@ -35,9 +35,9 @@ namespace api.Repository
             return line;
         }
 
-        public async Task<JournalHeader?> DeleteAsync(int id)
+        public async Task<JournalHeader?> DeleteAsync(string userid, int id)
         {
-            var header = await ctx.JournalHeaders.FirstOrDefaultAsync(x => x.Id == id);
+            var header = await ctx.JournalHeaders.FirstOrDefaultAsync(x => x.Id == id && x.UserId == userid);
 
             if (header == null) return null;
 
@@ -65,25 +65,25 @@ namespace api.Repository
             return line;
         }
 
-        public async Task<List<JournalHeader>> GetAll()
+        public async Task<List<JournalHeader>> GetAll(string userid)
         {
             return await ctx.JournalHeaders
             .Include(l => l.JournalLines.Where(l => l.State)
-            ).Where(h => h.State).ToListAsync();
+            ).Where(h => h.State && h.UserId == userid).ToListAsync();
         }
 
-        public async Task<JournalHeader?> GetById(int id)
+        public async Task<JournalHeader?> GetById(string userid, int id)
         {
             return await ctx.JournalHeaders
             .AsNoTracking()
-            .Where(h => h.Id == id && h.State)
+            .Where(h => h.Id == id && h.State && h.UserId == userid)
             .Include(l => l.JournalLines.Where(l => l.State))
             .FirstOrDefaultAsync();
         }
 
-        public async Task<JournalHeader?> UpdateAsync(int id, UpdateJournalHEaderDto dto)
+        public async Task<JournalHeader?> UpdateAsync(string userid, int id, UpdateJournalHEaderDto dto)
         {
-            var h = await ctx.JournalHeaders.FirstOrDefaultAsync(x => x.Id == id);
+            var h = await ctx.JournalHeaders.FirstOrDefaultAsync(x => x.Id == id && x.UserId == userid);
             if (h == null) return null;
 
             h.DateMove = dto.DateMove;
