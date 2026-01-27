@@ -21,5 +21,6 @@ namespace api.Models
         public int? BusinessId { get; set; }
         public Business? Business { get; set; }
         public string? Note { get; set; }
+        public bool State { get; set; } = true;
     }
 }

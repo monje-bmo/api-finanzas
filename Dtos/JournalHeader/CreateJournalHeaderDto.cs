@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using api.Dtos.JournalLine;
 using api.Enums;
 
 namespace api.Dtos.JournalHeader
@@ -11,6 +12,7 @@ namespace api.Dtos.JournalHeader
         public DateTime DateMove { get; set; }
         public TypeMove TypeMoves { get; set; }
         public string Description { get; set; } = string.Empty;
+        public List<CreateJournalLineDto> journalLineDtos { get; set; } = new();
 
     }
 }
