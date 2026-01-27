@@ -31,7 +31,8 @@ namespace api.Mappers
                 AccountId = l.AccountId,
                 Amount = l.Amount,
                 BusinessId = l.BusinessId,
-                CategoryId = l.CategoryId
+                CategoryId = l.CategoryId,
+                Note = l.Note
             };
         }
     }
