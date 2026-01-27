@@ -54,7 +54,7 @@ Crea/edita este archivo en el proyecto donde está tu `Program.cs`:
 }
 ```
 
-✅ Importante:
+Importante:
 
 * `SigningKey` mínimo **32 caracteres**, mejor si es largo y random.
 * **No subas** este archivo con secrets al repo (agregalo al `.gitignore`).
