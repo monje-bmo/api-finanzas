@@ -48,9 +48,13 @@ namespace api.Controllers
         {
             if (!ModelState.IsValid) return BadRequest();
             var email = User.GetUserEmail();
-            if(string.IsNullOrEmpty(email)) return Unauthorized("Inicie sesion de nuevo.");
+            if (string.IsNullOrEmpty(email)) return Unauthorized("Inicie sesion de nuevo.");
             var user = await userManager.FindByEmailAsync(email);
             if (user == null) return NotFound("Usuario no encontrado.");
+
+
+            if (dto.journalLineDtos == null || dto.journalLineDtos.Count <= 2)
+                return BadRequest("No se aceptan menos de 2 lineas.");
 
             var dailyMovementModel = new JournalHeader
             {
@@ -74,7 +78,7 @@ namespace api.Controllers
 
             return CreatedAtAction(
                 nameof(GetById),
-                new {id = dailyMovement.Id},
+                new { id = dailyMovement.Id },
                 dailyMovement.toMovementDto()
             );
 

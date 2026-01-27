@@ -17,6 +17,7 @@ namespace api.Dtos.JournalHeader
         [Required]
         [MaxLength(255, ErrorMessage = "No se permite mas de 255 caracteres")]
         public string Description { get; set; } = string.Empty;
+        [MinLength(2, ErrorMessage = "Debe de tener al menos 2 lineas.")]
         public List<CreateJournalLineDto> journalLineDtos { get; set; } = new();
 
     }
