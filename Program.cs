@@ -92,6 +92,7 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IBusinessRepository, BusinessRepository>();
 builder.Services.AddScoped<ITypeBusinessRepo, TypeBusinessRepo>();
 builder.Services.AddScoped<IDailyMovement, DailyMovementRepo>();
+builder.Services.AddScoped<IDebtsInterface, DebtsRepository>();
 
 
 var app = builder.Build();

@@ -10,9 +10,6 @@ namespace api.Dtos.Debt
     {
         public int Id { get; set; }
 
-        //fk user
-        public int UserId { get; set; }
-
         // fk business
         public int? BusinessID { get; set; }
 
@@ -26,7 +23,6 @@ namespace api.Dtos.Debt
         public string Description { get; set; } = string.Empty;
         public bool State { get; set; } = true;
         public DateTime CreatedAt { get; set; }
-        public DateTime UpdateAt { get; set; }
 
         public List<DebtMovementDto> DebtMovements { get; set; }
 
