@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using api.Dtos.JournalHeader;
 using api.Dtos.JournalLine;
 using api.Models;
+using Humanizer;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Npgsql.Internal;
 
 namespace api.Mappers
 {
@@ -35,6 +38,31 @@ namespace api.Mappers
                 Note = l.Note
             };
         }
+
+
+        public static JournalHeader ToUpdateFromHeaderJournal(this UpdateJournalHEaderDto dto)
+        {
+            return new JournalHeader
+            {
+                DateMove = dto.DateMove,
+                TypeMoves = dto.TypeMoves,
+                Description = dto.Description,
+                State = dto.State
+            };
+        }
+
+        public static JournalLine ToDtoJL(this CreateJournalLineDto dto)
+        {
+            return new JournalLine
+            {
+                AccountId = dto.AccountId,
+                Amount = dto.Amount,
+                CategoryId = dto.CategoryId,
+                BusinessId = dto.BusinessId,
+                Note = dto.Note
+            };
+        }
+
     }
 }
 

@@ -10,6 +10,7 @@ using api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace api.Controllers
 {
@@ -83,6 +84,44 @@ namespace api.Controllers
             );
 
         }
+
+
+        [HttpPut]
+        [Route("{id:int}")]
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateJournalHEaderDto dto)
+        {
+            if (!ModelState.IsValid) return BadRequest();
+
+            var email = User.GetUserEmail();
+            if (string.IsNullOrEmpty(email)) return Unauthorized("Inicie sesion de nuevo.");
+            var user = await userManager.FindByEmailAsync(email);
+            if (user == null) return NotFound("Usuario no encontrado.");
+                
+            var header = await repo.UpdateAsync(user.Id, id, dto);
+            if (header == null) return NotFound("movimiento no encontrado.");
+
+
+            return Ok(header.toMovementDto());
+        }
+
+
+        [HttpDelete]
+        [Route("id:int")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            if(!ModelState.IsValid) return BadRequest();
+
+            var email = User.GetUserEmail();
+            if (string.IsNullOrEmpty(email)) return Unauthorized("Inicie sesion de nuevo.");
+            var user = await userManager.FindByEmailAsync(email);
+            if (user == null) return NotFound("Usuario no encontrado.");
+
+            var model = await repo.DeleteAsync(user.Id, id);
+            if (model == null) return NotFound("Movimineto no encontrado.");
+
+            return NoContent();
+        }    
+
 
     }
 }
